@@ -59,7 +59,6 @@ app.get('/v1/models', (req, res) => {
 
 // Chat completions endpoint (main proxy)
 app.post('/v1/chat/completions',
-         express.json({ limit: '200mb' }),
          async (req, res) => {
     try {
         const { model, messages, temperature, max_tokens, stream } = req.body;
