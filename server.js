@@ -6,6 +6,10 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: '200mb' }));
+
 // NVIDIA NIM API configuration
 const NIM_API_BASE = process.env.NIM_API_BASE || 'https://integrate.api.nvidia.com/v1';
 const NIM_API_KEY = process.env.NIM_API_KEY;
@@ -55,6 +59,7 @@ app.get('/v1/models', (req, res) => {
 
 // Chat completions endpoint (main proxy)
 app.post('/v1/chat/completions',
+         express.json({ limit: '200mb' }),
          async (req, res) => {
     try {
         const { model, messages, temperature, max_tokens, stream } = req.body;
@@ -223,10 +228,6 @@ app.post('/v1/chat/completions',
         });
     }
 });
-
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: '200mb' }));
 
 // Catch-all for unsupported endpoints
 app.all('*', (req, res) => {
